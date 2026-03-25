@@ -39,6 +39,9 @@ def _fetch_with_retry(func, *args, max_retries=3, backoff=2):
                 wait = backoff ** (attempt + 1)
                 print(f"Rate limit. Aguardando {wait}s...")
                 time.sleep(wait)
+            elif e.http_status in (404, 403):
+                print(f"Playlist não encontrada ou sem acesso (HTTP {e.http_status}). Pulando...")
+                return None
             else:
                 raise
     return None
