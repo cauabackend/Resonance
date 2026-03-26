@@ -24,10 +24,16 @@ def train_and_save(
         X, y, test_size=0.2, stratify=y, random_state=42,
     )
 
+    neg = (y_train == 0).sum()
+    pos = (y_train == 1).sum()
+    ratio = neg / pos
+    print(f"Balanceamento: {neg} não-hits / {pos} hits (ratio={ratio:.1f})")
+
     model = XGBClassifier(
-        n_estimators=200,
-        max_depth=6,
-        learning_rate=0.1,
+        n_estimators=300,
+        max_depth=5,
+        learning_rate=0.05,
+        scale_pos_weight=ratio * 0.65,
         eval_metric="logloss",
         random_state=42,
     )
