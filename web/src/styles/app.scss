@@ -1,0 +1,314 @@
+@use "sass:color";
+
+:root {
+  --r-surface: #1a1a1a;
+  --r-surface-hover: #242424;
+  --r-line: #4a4a4a;
+  --r-muted: #9a9a9a;
+  --r-ease: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+body {
+  font-feature-settings: "tnum" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+.app-shell {
+  max-width: 68rem;
+  margin-inline: auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+.wordmark {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--bs-white);
+  text-decoration: none;
+}
+
+.page-title {
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  max-width: 18ch;
+}
+
+.lede {
+  color: var(--bs-gray-300);
+  max-width: 52ch;
+}
+
+.text-muted-r {
+  color: var(--r-muted);
+}
+
+a:focus-visible,
+button:focus-visible,
+.form-control:focus-visible {
+  outline: 2px solid var(--bs-white);
+  outline-offset: 2px;
+}
+
+// Resultado de busca: linha inteira clicável, sem cartão aninhado.
+.track-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.125rem;
+  background: var(--r-surface);
+  border: 1px solid var(--r-line);
+  border-radius: var(--bs-border-radius-lg);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    background-color 0.18s var(--r-ease),
+    border-color 0.18s var(--r-ease);
+  animation: row-in 0.4s var(--r-ease) both;
+  animation-delay: calc(var(--i, 0) * 28ms);
+
+  &:hover {
+    background: var(--r-surface-hover);
+    border-color: var(--bs-gray-500);
+    color: inherit;
+  }
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.nav-top {
+  color: var(--r-muted);
+  text-decoration: none;
+  padding-bottom: 0.15rem;
+  border-bottom: 2px solid transparent;
+
+  &:hover {
+    color: var(--bs-white);
+  }
+
+  &.active {
+    color: var(--bs-white);
+    border-bottom-color: var(--bs-white);
+  }
+}
+
+.ranking-table tbody tr {
+  animation: row-in 0.35s var(--r-ease) both;
+  animation-delay: calc(var(--i, 0) * 20ms);
+}
+
+// Fim do top-K: uma linha mais forte, sem cor.
+.ranking-table tr.ranking-cut > * {
+  border-bottom: 2px solid var(--bs-white);
+}
+
+.score-col {
+  width: 7rem;
+  min-width: 5rem;
+}
+
+// Barra monocromática do percentil: 0-100 na escala real, sem esticar (os scores ficam perto de 50).
+.score-bar {
+  display: block;
+  height: 6px;
+  background: var(--bs-gray-800);
+  border-radius: 999px;
+  overflow: hidden;
+
+  > span {
+    display: block;
+    height: 100%;
+    background: var(--bs-white);
+    border-radius: 999px;
+  }
+}
+
+// Alternador de modalidade: estado por peso, preenchimento e borda, sem cor.
+.mode-switch {
+  display: inline-flex;
+  border: 1px solid var(--r-line);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+
+  button {
+    background: transparent;
+    color: var(--r-muted);
+    border: 0;
+    border-radius: 999px;
+    padding: 0.35rem 1rem;
+    font-size: 0.875rem;
+
+    &[aria-pressed="true"] {
+      background: var(--bs-white);
+      color: var(--bs-black);
+      font-weight: 600;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):not([aria-pressed="true"]):hover {
+      color: var(--bs-white);
+    }
+  }
+}
+
+.contrast-toggle {
+  background: transparent;
+  color: var(--r-muted);
+  border: 1px solid var(--r-line);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.8125rem;
+
+  &:hover,
+  &[aria-pressed="true"] {
+    color: var(--bs-white);
+    border-color: var(--bs-white);
+  }
+}
+
+// Alto contraste: mais luminosidade no texto secundário e bordas mais fortes (continua sem matiz).
+:root[data-contrast="high"] {
+  --r-muted: #e5e5e5;
+  --r-line: #bdbdbd;
+  --r-surface: #000000;
+  --r-surface-hover: #1f1f1f;
+  --bs-body-color: #ffffff;
+  --bs-border-color: #bdbdbd;
+  --bs-secondary-color: #e5e5e5;
+  --bs-gray-300: #ffffff;
+  --bs-gray-500: #e5e5e5;
+  --bs-gray-700: #bdbdbd;
+
+  .form-control,
+  .form-control:focus {
+    border-color: #ffffff;
+    background-color: #000000;
+  }
+}
+
+.pop-score {
+  font-variant-numeric: tabular-nums;
+  color: var(--r-muted);
+  white-space: nowrap;
+}
+
+// Resultado: peso, caixa e contraste carregam o significado (sem matiz).
+.verdict {
+  white-space: nowrap;
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+
+  &--hit {
+    background: var(--bs-white);
+    color: var(--bs-black);
+    border: 2px solid var(--bs-white);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &--miss {
+    background: transparent;
+    color: var(--bs-gray-300);
+    border: 1px solid var(--r-line);
+    font-weight: 500;
+  }
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--r-line);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  color: var(--bs-gray-300);
+}
+
+.panel {
+  border: 1px solid var(--r-line);
+  border-radius: var(--bs-border-radius-lg);
+  background: var(--r-surface);
+  padding: 1.25rem;
+}
+
+.factor-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: 0.6rem 0;
+    border-top: 1px solid var(--r-line);
+  }
+
+  li:first-child {
+    border-top: 0;
+  }
+}
+
+.nav-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  .nav-link {
+    color: var(--bs-gray-500);
+    white-space: nowrap;
+    background: transparent;
+
+    &:hover {
+      color: var(--bs-white);
+    }
+
+    &.active {
+      color: var(--bs-white);
+      font-weight: 600;
+    }
+  }
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent;
+}
+
+.skeleton {
+  background: var(--r-surface);
+  border-radius: var(--bs-border-radius);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track-row,
+  .ranking-table tbody tr,
+  .skeleton {
+    animation: none;
+  }
+  .track-row {
+    transition: none;
+  }
+}

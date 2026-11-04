@@ -1,0 +1,38 @@
+name: drift
+# Relatório Evidently periódico; publica o HTML como artifact (sem nuvem paga).
+on:
+  workflow_dispatch:
+    inputs:
+      synthetic:
+        description: "Usar tráfego sintético deslocado (demo)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    env:
+      MLFLOW_DISABLE_AGENT_HINT: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pipeline/pyproject.toml
+      - run: pip install -e shared -e "pipeline[dev]"
+      - run: dvc pull data/processed/tracks.csv
+        continue-on-error: true
+      - run: dvc repro target
+        working-directory: pipeline
+      - name: relatório
+        # exit 1 = drift acima do limiar (alerta); o artifact é publicado de qualquer forma.
+        run: python -m resonance_pipeline.drift ${{ (github.event_name == 'schedule' || inputs.synthetic) && '--synthetic' || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: drift-report
+          path: reports/drift.html

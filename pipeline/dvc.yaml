@@ -1,0 +1,104 @@
+stages:
+  validate:
+    cmd: python -m resonance_pipeline.validate
+    deps:
+      - ../data/raw/dataset.csv
+      - src/resonance_pipeline/schema.py
+      - src/resonance_pipeline/validate.py
+    outs:
+      - ../data/DATA_DICTIONARY.md:
+          cache: false
+  preprocess:
+    cmd: python -m resonance_pipeline.preprocess
+    deps:
+      - ../data/raw/dataset.csv
+      - src/resonance_pipeline/preprocess.py
+      - src/resonance_pipeline/schema.py
+    params:
+      - data.raw
+      - data.clean
+      - data.max_duration_ms
+      - data.min_tempo
+    outs:
+      - ../data/processed/clean.csv
+  target:
+    cmd: python -m resonance_pipeline.target
+    deps:
+      - ../data/processed/clean.csv
+      - src/resonance_pipeline/target.py
+      - src/resonance_pipeline/schema.py
+    params:
+      - data.clean
+      - data.processed
+      - data.hit_threshold
+    outs:
+      - ../data/processed/tracks.csv
+  analyze:
+    cmd: python -m resonance_pipeline.analyze
+    deps:
+      - ../data/processed/tracks.csv
+      - src/resonance_pipeline/analyze.py
+    params:
+      - analysis
+      - data.hit_threshold
+    outs:
+      - ../reports/analysis.json:
+          cache: false
+  train:
+    cmd: python -m resonance_pipeline.train
+    deps:
+      - ../data/processed/tracks.csv
+      - src/resonance_pipeline/train.py
+      - src/resonance_pipeline/calibrate.py
+      - src/resonance_pipeline/common.py
+      - ../shared/src/resonance_features/__init__.py
+    params:
+      - split
+      - features
+      - xgb
+      - tune
+      - decision
+      - evaluate.ndcg_k
+      - evaluate.batch_size
+      - evaluate.n_batches
+    outs:
+      - ../model/candidate
+  evaluate:
+    cmd: python -m resonance_pipeline.evaluate
+    deps:
+      - ../model/candidate
+      - ../data/processed/tracks.csv
+      - src/resonance_pipeline/evaluate.py
+      - src/resonance_pipeline/train.py
+      - src/resonance_pipeline/calibrate.py
+      - ../shared/src/resonance_features/__init__.py
+    params:
+      - split
+      - features
+      - xgb
+      - tune
+      - decision
+      - evaluate
+    outs:
+      - ../model/production:
+          persist: true
+    metrics:
+      - ../reports/metrics.json:
+          cache: false
+  leaderboard:
+    cmd: python -m resonance_pipeline.leaderboard
+    deps:
+      - ../data/processed/tracks.csv
+      - ../model/production
+      - src/resonance_pipeline/leaderboard.py
+      - src/resonance_pipeline/train.py
+      - ../shared/src/resonance_features/__init__.py
+    params:
+      - split
+      - features
+      - evaluate.ndcg_k
+      - evaluate.batch_size
+      - evaluate.n_batches
+    outs:
+      - ../reports/leaderboard.json:
+          cache: false

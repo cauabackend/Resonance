@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "resonance-pipeline"
+version = "0.1.0"
+description = "Pipeline de dados e ML do Resonance (DVC + MLflow)"
+requires-python = ">=3.12"
+dependencies = [
+  "resonance-features",  # pip install -e ../shared (mesmo código de features no treino e na API)
+  "pandas==2.3.3",
+  "numpy==2.5.4",
+  "scipy",
+  "statsmodels",
+  "scikit-learn==1.9.1",
+  "xgboost==3.4.1",
+  "pandera==0.35.0",
+  "mlflow==3.17.2",
+  "pyyaml",
+  "joblib",
+  "spotipy",
+  "python-dotenv",
+  "evidently==0.7.23",
+  "shap==0.54.1",
+  "matplotlib",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "ruff", "mypy", "pandas-stubs", "dvc==3.67.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=resonance_pipeline --cov-fail-under=80"
+
+[tool.ruff]
+line-length = 120
+
+[tool.mypy]
+ignore_missing_imports = true

@@ -1,0 +1,244 @@
+{
+  "holdout": {
+    "spearman": 0.4694841560558137,
+    "ndcg_at_k": 0.8031899086892316,
+    "ndcg_k": 50,
+    "brier": 0.06239831415496913,
+    "ece": 0.014465918617284908,
+    "reliability": [
+      {
+        "mean_pred": 0.02885659279423454,
+        "frac_pos": 0.02645280483708431,
+        "n": 11908
+      },
+      {
+        "mean_pred": 0.12837715542221428,
+        "frac_pos": 0.15372549019607842,
+        "n": 1275
+      },
+      {
+        "mean_pred": 0.25580978538462307,
+        "frac_pos": 0.3207171314741036,
+        "n": 502
+      },
+      {
+        "mean_pred": 0.33489700328536737,
+        "frac_pos": 0.3574561403508772,
+        "n": 456
+      },
+      {
+        "mean_pred": 0.42590476190476195,
+        "frac_pos": 0.4114285714285714,
+        "n": 175
+      },
+      {
+        "mean_pred": 0.5346534653465348,
+        "frac_pos": 0.47058823529411764,
+        "n": 153
+      },
+      {
+        "mean_pred": 0.6296122487158254,
+        "frac_pos": 0.5110732538330494,
+        "n": 587
+      },
+      {
+        "mean_pred": 0.7499657395594033,
+        "frac_pos": 0.5348837209302325,
+        "n": 43
+      },
+      {
+        "mean_pred": 0.8287292817679561,
+        "frac_pos": 0.9107692307692308,
+        "n": 325
+      },
+      {
+        "mean_pred": 1.0,
+        "frac_pos": 0.9444444444444444,
+        "n": 36
+      }
+    ],
+    "brier_uncalibrated": 0.1349261502833537,
+    "brier_base_rate": 0.09441924994435416,
+    "hit_roc_auc": 0.8843082485380616,
+    "badge_precision": 0.5126130414088529,
+    "badge_recall": 0.6599264705882353,
+    "score_std": 14.103555679321289,
+    "audio_only_spearman": 0.14385066147425196,
+    "audio_only_ndcg_at_k": 0.6245710063297689,
+    "audio_only_brier": 0.07839893123377205,
+    "audio_only_ece": 0.01163636582015326,
+    "audio_only_reliability": [
+      {
+        "mean_pred": 0.039785666707983704,
+        "frac_pos": 0.044442504147384966,
+        "n": 11453
+      },
+      {
+        "mean_pred": 0.1356034497672668,
+        "frac_pos": 0.1434700992223116,
+        "n": 3729
+      },
+      {
+        "mean_pred": 0.256512915847853,
+        "frac_pos": 0.3675496688741722,
+        "n": 302
+      },
+      {
+        "mean_pred": 0.3258301661333109,
+        "frac_pos": 0.36425339366515835,
+        "n": 442
+      },
+      {
+        "mean_pred": 0.5042178128296672,
+        "frac_pos": 0.42657342657342656,
+        "n": 715
+      },
+      {
+        "mean_pred": 0.6550717191960166,
+        "frac_pos": 1.0,
+        "n": 4
+      },
+      {
+        "mean_pred": 0.7454725631149234,
+        "frac_pos": 0.7301587301587301,
+        "n": 126
+      },
+      {
+        "mean_pred": 0.8738085594012401,
+        "frac_pos": 0.9150943396226415,
+        "n": 106
+      }
+    ],
+    "audio_only_brier_uncalibrated": 0.1443762283564021,
+    "audio_only_brier_base_rate": 0.09593084237051651,
+    "audio_only_hit_roc_auc": 0.7997079484101357,
+    "audio_only_badge_precision": 0.46316463805253044,
+    "audio_only_badge_recall": 0.3985667034178611,
+    "audio_only_score_std": 5.5796709060668945
+  },
+  "baseline": {
+    "genre_mean": {
+      "spearman": -0.00757840054741598,
+      "ndcg_at_k": 0.4972668508630897,
+      "ndcg_k": 50
+    },
+    "ridge": {
+      "spearman": -0.00256531655900221,
+      "ndcg_at_k": 0.5509228585246732,
+      "ndcg_k": 50
+    },
+    "artist_mean": {
+      "spearman": 0.30060118591881724,
+      "ndcg_at_k": 0.7329665747868889,
+      "ndcg_k": 50
+    }
+  },
+  "nested_cv": {
+    "chosen_hyperparams": [
+      {
+        "max_depth": 8,
+        "n_estimators": 400
+      },
+      {
+        "max_depth": 6,
+        "n_estimators": 400
+      },
+      {
+        "max_depth": 6,
+        "n_estimators": 400
+      },
+      {
+        "max_depth": 6,
+        "n_estimators": 400
+      },
+      {
+        "max_depth": 6,
+        "n_estimators": 400
+      }
+    ],
+    "shap_stability": {
+      "mean_pairwise_spearman": 0.9588235294117649,
+      "min_pairwise_spearman": 0.9166666666666667,
+      "mean_abs_shap": {
+        "danceability": 0.7518535614013672,
+        "energy": 0.8149189949035645,
+        "valence": 0.5622015297412872,
+        "tempo": 0.5280984997749328,
+        "loudness": 0.964311671257019,
+        "speechiness": 0.7160811066627503,
+        "acousticness": 0.7738347172737121,
+        "instrumentalness": 0.7739445686340332,
+        "duration_ms": 0.8759174227714539,
+        "liveness": 0.6068324327468873,
+        "key": 0.17828570306301117,
+        "mode": 0.07875809222459793,
+        "time_signature": 0.18608961254358292,
+        "explicit": 0.28052084147930145,
+        "energy_x_danceability": 0.36879003047943115,
+        "artist_context": 9.786759185791016,
+        "track_genre": 1.4652403116226196
+      }
+    },
+    "artist_aware": {
+      "spearman_mean": 0.4906398969573905,
+      "spearman_std": 0.0033799560469061113,
+      "ndcg_at_k_mean": 0.8282019905628513,
+      "ndcg_at_k_std": 0.009488880765526344,
+      "niche_segments": {
+        "grindcore": {
+          "n": 933,
+          "hits": 0,
+          "spearman": 0.2842192903676726,
+          "ndcg_at_k": 0.6250582081338463,
+          "ndcg_k": 50
+        },
+        "black-metal": {
+          "n": 881,
+          "hits": 0,
+          "spearman": 0.4451218203521519,
+          "ndcg_at_k": 0.7186285821283153,
+          "ndcg_k": 50
+        },
+        "study": {
+          "n": 901,
+          "hits": 0,
+          "spearman": 0.3400997074277142,
+          "ndcg_at_k": 0.6944231095045457,
+          "ndcg_k": 50
+        }
+      }
+    },
+    "audio_only": {
+      "spearman_mean": 0.13638717622974544,
+      "spearman_std": 0.009107276007376089,
+      "ndcg_at_k_mean": 0.6227022365768238,
+      "ndcg_at_k_std": 0.014271242466911823,
+      "niche_segments": {
+        "grindcore": {
+          "n": 965,
+          "hits": 0,
+          "spearman": 0.05784351943140388,
+          "ndcg_at_k": 0.6254275201137314,
+          "ndcg_k": 50
+        },
+        "black-metal": {
+          "n": 985,
+          "hits": 0,
+          "spearman": 0.10888979375111485,
+          "ndcg_at_k": 0.6204233896688224,
+          "ndcg_k": 50
+        },
+        "study": {
+          "n": 996,
+          "hits": 0,
+          "spearman": 0.22792473427145887,
+          "ndcg_at_k": 0.5802198962300241,
+          "ndcg_k": 50
+        }
+      }
+    }
+  },
+  "production_before": null,
+  "promoted": true,
+  "gate_reason": "ok"
+}

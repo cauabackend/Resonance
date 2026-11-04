@@ -1,0 +1,277 @@
+schema: '2.0'
+stages:
+  validate:
+    cmd: python -m resonance_pipeline.validate
+    deps:
+    - path: ../data/raw/dataset.csv
+      hash: md5
+      md5: 0afbec2c0b2a42e8a2fb0f7526b93e22
+      size: 14163330
+    - path: src/resonance_pipeline/schema.py
+      hash: md5
+      md5: af7f998b5ef0c5e4aa67a393caec8e40
+      size: 4926
+    - path: src/resonance_pipeline/validate.py
+      hash: md5
+      md5: ae74be539e769db3e652380d5fbfc145
+      size: 816
+    outs:
+    - path: ../data/DATA_DICTIONARY.md
+      hash: md5
+      md5: 9261cf28ad0b2ea471e9cbbd573aa73a
+      size: 2395
+  preprocess:
+    cmd: python -m resonance_pipeline.preprocess
+    deps:
+    - path: ../data/raw/dataset.csv
+      hash: md5
+      md5: 0afbec2c0b2a42e8a2fb0f7526b93e22
+      size: 14163330
+    - path: src/resonance_pipeline/preprocess.py
+      hash: md5
+      md5: 3299b1fa1a6bb9762b92008fef269a95
+      size: 1532
+    - path: src/resonance_pipeline/schema.py
+      hash: md5
+      md5: af7f998b5ef0c5e4aa67a393caec8e40
+      size: 4926
+    params:
+      params.yaml:
+        data.clean: data/processed/clean.csv
+        data.max_duration_ms: 900000
+        data.min_tempo: 30
+        data.raw: data/raw/dataset.csv
+    outs:
+    - path: ../data/processed/clean.csv
+      hash: md5
+      md5: e4fc9d579dc50982b2f2025c870c6f12
+      size: 13709793
+  analyze:
+    cmd: python -m resonance_pipeline.analyze
+    deps:
+    - path: ../data/processed/tracks.csv
+      hash: md5
+      md5: 18f29252fd208d2ca57bf6fcba1a4e05
+      size: 16994514
+    - path: src/resonance_pipeline/analyze.py
+      hash: md5
+      md5: 1fa7a5213ede2d5e8d7c84d79c8c1b98
+      size: 3991
+    params:
+      params.yaml:
+        analysis:
+          sensitivity_thresholds:
+          - 55
+          - 60
+          - 65
+          - 70
+          alpha: 0.05
+          genre_cutoffs:
+          - 30
+          - 50
+          - 100
+          - 200
+          - 500
+        data.hit_threshold: 60
+    outs:
+    - path: ../reports/analysis.json
+      hash: md5
+      md5: b902b6ec04bee23bc2ca1eb9ef8a8528
+      size: 7511
+  train:
+    cmd: python -m resonance_pipeline.train
+    deps:
+    - path: ../data/processed/tracks.csv
+      hash: md5
+      md5: 18f29252fd208d2ca57bf6fcba1a4e05
+      size: 16994514
+    - path: ../shared/src/resonance_features/__init__.py
+      hash: md5
+      md5: 94f544537b9c3c1f4a230874fb11fb20
+      size: 6177
+    - path: src/resonance_pipeline/calibrate.py
+      hash: md5
+      md5: 7a272f35f0e0a1f57233aea7a7b4fae9
+      size: 3437
+    - path: src/resonance_pipeline/common.py
+      hash: md5
+      md5: b5ee2e6614e6bbeb9cd2dcc15433e96f
+      size: 606
+    - path: src/resonance_pipeline/train.py
+      hash: md5
+      md5: 58ef0620d0695a8a94952b04e1f43c0e
+      size: 14561
+    params:
+      params.yaml:
+        decision:
+          fn_cost: 3
+          fp_cost: 1
+        evaluate.batch_size: 500
+        evaluate.n_batches: 100
+        evaluate.ndcg_k: 50
+        features:
+          min_genre_count: 100
+          artist_mask_rate: 0.5
+        split:
+          test_size: 0.2
+          calib_size: 0.25
+          seed: 42
+        tune:
+          grid:
+            max_depth:
+            - 6
+            - 8
+            n_estimators:
+            - 400
+            - 800
+          folds: 3
+        xgb:
+          learning_rate: 0.05
+          subsample: 0.8
+          colsample_bytree: 0.8
+    outs:
+    - path: ../model/candidate
+      hash: md5
+      md5: 411b3f7b9b9d479cf8de200c79e3474a.dir
+      size: 2025230
+      nfiles: 4
+  evaluate:
+    cmd: python -m resonance_pipeline.evaluate
+    deps:
+    - path: ../data/processed/tracks.csv
+      hash: md5
+      md5: 18f29252fd208d2ca57bf6fcba1a4e05
+      size: 16994514
+    - path: ../model/candidate
+      hash: md5
+      md5: 411b3f7b9b9d479cf8de200c79e3474a.dir
+      size: 2025230
+      nfiles: 4
+    - path: ../shared/src/resonance_features/__init__.py
+      hash: md5
+      md5: 94f544537b9c3c1f4a230874fb11fb20
+      size: 6177
+    - path: src/resonance_pipeline/calibrate.py
+      hash: md5
+      md5: 7a272f35f0e0a1f57233aea7a7b4fae9
+      size: 3437
+    - path: src/resonance_pipeline/evaluate.py
+      hash: md5
+      md5: 411d6afa263eba932f4876b4c984eaa9
+      size: 9728
+    - path: src/resonance_pipeline/train.py
+      hash: md5
+      md5: 58ef0620d0695a8a94952b04e1f43c0e
+      size: 14561
+    params:
+      params.yaml:
+        decision:
+          fn_cost: 3
+          fp_cost: 1
+        evaluate:
+          cv_folds: 5
+          niche_genres:
+          - grindcore
+          - black-metal
+          - study
+          ndcg_k: 50
+          batch_size: 500
+          n_batches: 100
+          gate_tolerance: 0.005
+          brier_tolerance: 0.002
+        features:
+          min_genre_count: 100
+          artist_mask_rate: 0.5
+        split:
+          test_size: 0.2
+          calib_size: 0.25
+          seed: 42
+        tune:
+          grid:
+            max_depth:
+            - 6
+            - 8
+            n_estimators:
+            - 400
+            - 800
+          folds: 3
+        xgb:
+          learning_rate: 0.05
+          subsample: 0.8
+          colsample_bytree: 0.8
+    outs:
+    - path: ../model/production
+      hash: md5
+      md5: 411b3f7b9b9d479cf8de200c79e3474a.dir
+      size: 2025230
+      nfiles: 4
+    - path: ../reports/metrics.json
+      hash: md5
+      md5: 0bcef829ac5971ba96ad2dc5c26e10b1
+      size: 825
+  target:
+    cmd: python -m resonance_pipeline.target
+    deps:
+    - path: ../data/processed/clean.csv
+      hash: md5
+      md5: e4fc9d579dc50982b2f2025c870c6f12
+      size: 13709793
+    - path: src/resonance_pipeline/schema.py
+      hash: md5
+      md5: af7f998b5ef0c5e4aa67a393caec8e40
+      size: 4926
+    - path: src/resonance_pipeline/target.py
+      hash: md5
+      md5: 7f192f4e2be8efbc6be64887aaa50c02
+      size: 2037
+    params:
+      params.yaml:
+        data.clean: data/processed/clean.csv
+        data.hit_threshold: 60
+        data.processed: data/processed/tracks.csv
+    outs:
+    - path: ../data/processed/tracks.csv
+      hash: md5
+      md5: 18f29252fd208d2ca57bf6fcba1a4e05
+      size: 16994514
+  leaderboard:
+    cmd: python -m resonance_pipeline.leaderboard
+    deps:
+    - path: ../data/processed/tracks.csv
+      hash: md5
+      md5: 18f29252fd208d2ca57bf6fcba1a4e05
+      size: 16994514
+    - path: ../model/production
+      hash: md5
+      md5: 411b3f7b9b9d479cf8de200c79e3474a.dir
+      size: 2025230
+      nfiles: 4
+    - path: ../shared/src/resonance_features/__init__.py
+      hash: md5
+      md5: 94f544537b9c3c1f4a230874fb11fb20
+      size: 6177
+    - path: src/resonance_pipeline/leaderboard.py
+      hash: md5
+      md5: 1f3bf0758edb511231f5b328b68414a5
+      size: 4325
+    - path: src/resonance_pipeline/train.py
+      hash: md5
+      md5: 58ef0620d0695a8a94952b04e1f43c0e
+      size: 14561
+    params:
+      params.yaml:
+        evaluate.batch_size: 500
+        evaluate.n_batches: 100
+        evaluate.ndcg_k: 50
+        features:
+          min_genre_count: 100
+          artist_mask_rate: 0.5
+        split:
+          test_size: 0.2
+          calib_size: 0.25
+          seed: 42
+    outs:
+    - path: ../reports/leaderboard.json
+      hash: md5
+      md5: 90df8ad12e2cd569d9dfaa8d1fab26b4
+      size: 1360

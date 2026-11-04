@@ -1,0 +1,57 @@
+{
+  "ridge": {
+    "fit_seconds": 0.5,
+    "artist_aware": {
+      "spearman": 0.45721400366062614,
+      "ndcg_at_k": 0.7863258551645669
+    },
+    "audio_only": {
+      "spearman": 0.009799705457841626,
+      "ndcg_at_k": 0.546748376667688
+    }
+  },
+  "random_forest": {
+    "fit_seconds": 21.5,
+    "artist_aware": {
+      "spearman": 0.47070050411999986,
+      "ndcg_at_k": 0.8093785606293725
+    },
+    "audio_only": {
+      "spearman": 0.14970532216830135,
+      "ndcg_at_k": 0.6316252785271049
+    }
+  },
+  "hist_gradient_boosting": {
+    "fit_seconds": 1.2,
+    "artist_aware": {
+      "spearman": 0.4759427914006382,
+      "ndcg_at_k": 0.8059644933435794
+    },
+    "audio_only": {
+      "spearman": 0.13483598052794538,
+      "ndcg_at_k": 0.626616132271056
+    }
+  },
+  "xgb_regressor": {
+    "fit_seconds": 2.0,
+    "artist_aware": {
+      "spearman": 0.47558142945466625,
+      "ndcg_at_k": 0.8114485945987123
+    },
+    "audio_only": {
+      "spearman": 0.1428177571342344,
+      "ndcg_at_k": 0.6350386784216384
+    }
+  },
+  "xgb_ranker_lambdamart": {
+    "fit_seconds": 3.9,
+    "artist_aware": {
+      "spearman": 0.38718902678195466,
+      "ndcg_at_k": 0.7850938997045097
+    },
+    "audio_only": {
+      "spearman": 0.09167232387097572,
+      "ndcg_at_k": 0.5721016779559978
+    }
+  }
+}

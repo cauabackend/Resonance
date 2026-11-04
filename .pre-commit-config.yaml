@@ -1,0 +1,36 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.10
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.15.0
+    hooks:
+      - id: mypy
+        files: ^(pipeline/src|api/app)/
+        args: [--ignore-missing-imports]
+        additional_dependencies: [pandas-stubs, pydantic]
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.6.0
+    hooks:
+      - id: conventional-pre-commit  # commitlint: feat:, fix:, docs:, chore:, refactor:, test:
+        stages: [commit-msg]
+  - repo: local
+    hooks:
+      - id: web-prettier
+        name: prettier (web)
+        entry: npx --prefix web prettier --write
+        language: system
+        files: ^web/src/.*\.(ts|tsx|scss)$
+      - id: web-eslint
+        name: eslint (web)
+        entry: npm --prefix web run lint
+        language: system
+        files: ^web/src/.*\.(ts|tsx)$
+        pass_filenames: false

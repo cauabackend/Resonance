@@ -1,0 +1,960 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Resonance API",
+    "version": "1.1.0"
+  },
+  "paths": {
+    "/v1/predict": {
+      "post": {
+        "tags": [
+          "predict"
+        ],
+        "summary": "Predict",
+        "description": "Uma m\u00fasica, resposta interativa (com explica\u00e7\u00e3o SHAP em pontos de percentil).",
+        "operationId": "predict_v1_predict_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PredictionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PredictionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/predict/batch": {
+      "post": {
+        "tags": [
+          "predict"
+        ],
+        "summary": "Predict Batch",
+        "description": "Lote vetorizado (ex.: 500 demos), devolvido ORDENADO por percentile_score, sem explica\u00e7\u00e3o SHAP.",
+        "operationId": "predict_batch_v1_predict_batch_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchPredictionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tracks/search": {
+      "get": {
+        "tags": [
+          "tracks"
+        ],
+        "summary": "Search",
+        "operationId": "search_v1_tracks_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 100,
+              "title": "Q"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TrackOut"
+                  },
+                  "title": "Response Search V1 Tracks Search Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tracks/{track_id}": {
+      "get": {
+        "tags": [
+          "tracks"
+        ],
+        "summary": "Get Track",
+        "operationId": "get_track_v1_tracks__track_id__get",
+        "parameters": [
+          {
+            "name": "track_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Track Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrackOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/model/metadata": {
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "Metadata",
+        "operationId": "metadata_v1_model_metadata_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelMetadata"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/health": {
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "Health",
+        "operationId": "health_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/health/deep": {
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "Health Deep",
+        "description": "Valida que o modelo em mem\u00f3ria \u00e9 o artefato que o registry serve agora (n\u00e3o s\u00f3 que o processo est\u00e1 de p\u00e9).",
+        "operationId": "health_deep_v1_health_deep_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeepHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BatchItem": {
+        "properties": {
+          "input_index": {
+            "type": "integer",
+            "title": "Input Index",
+            "description": "Posi\u00e7\u00e3o da faixa na lista enviada"
+          },
+          "rank": {
+            "type": "integer",
+            "title": "Rank",
+            "description": "Posi\u00e7\u00e3o no lote, 1 = maior percentile_score"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "artist_aware",
+              "audio_only"
+            ],
+            "title": "Mode"
+          },
+          "percentile_score": {
+            "type": "number",
+            "title": "Percentile Score"
+          },
+          "expected_popularity": {
+            "type": "number",
+            "title": "Expected Popularity"
+          },
+          "probability": {
+            "type": "number",
+            "title": "Probability"
+          },
+          "is_hit": {
+            "type": "boolean",
+            "title": "Is Hit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "input_index",
+          "rank",
+          "mode",
+          "percentile_score",
+          "expected_popularity",
+          "probability",
+          "is_hit"
+        ],
+        "title": "BatchItem"
+      },
+      "BatchPredictionResponse": {
+        "properties": {
+          "model_version": {
+            "type": "string",
+            "title": "Model Version"
+          },
+          "thresholds": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Thresholds",
+            "description": "Threshold do badge por modalidade (artist_aware, audio_only)"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/BatchItem"
+            },
+            "type": "array",
+            "title": "Results",
+            "description": "J\u00e1 ordenado por percentile_score decrescente"
+          },
+          "rank": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Rank",
+            "description": "rank[i] = posi\u00e7\u00e3o da i-\u00e9sima faixa enviada dentro do lote"
+          }
+        },
+        "type": "object",
+        "required": [
+          "model_version",
+          "thresholds",
+          "results",
+          "rank"
+        ],
+        "title": "BatchPredictionResponse"
+      },
+      "BatchRequest": {
+        "properties": {
+          "tracks": {
+            "items": {
+              "$ref": "#/components/schemas/TrackFeatures"
+            },
+            "type": "array",
+            "maxItems": 1000,
+            "minItems": 1,
+            "title": "Tracks"
+          },
+          "use_artist_context": {
+            "type": "boolean",
+            "title": "Use Artist Context",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "tracks"
+        ],
+        "title": "BatchRequest"
+      },
+      "DeepHealth": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "mismatch",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version"
+          },
+          "loaded_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Loaded Sha256"
+          },
+          "registry_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registry Sha256",
+            "description": "Hash do artefato que o registry serve AGORA (alias/vers\u00e3o atual)"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "model_version",
+          "loaded_sha256",
+          "registry_sha256",
+          "detail"
+        ],
+        "title": "DeepHealth"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Health": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version"
+          },
+          "catalog_loaded": {
+            "type": "boolean",
+            "title": "Catalog Loaded"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "model_version",
+          "catalog_loaded"
+        ],
+        "title": "Health"
+      },
+      "ModelMetadata": {
+        "properties": {
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "metrics": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Metrics"
+          },
+          "baseline_ridge_ndcg_at_k": {
+            "type": "number",
+            "title": "Baseline Ridge Ndcg At K",
+            "description": "Piso da modalidade s\u00f3-\u00e1udio (regress\u00e3o linear)"
+          },
+          "baseline_ridge_spearman": {
+            "type": "number",
+            "title": "Baseline Ridge Spearman"
+          },
+          "baseline_artist_mean_ndcg_at_k": {
+            "type": "number",
+            "title": "Baseline Artist Mean Ndcg At K",
+            "description": "Piso da modalidade com hist\u00f3rico (m\u00e9dia do artista)"
+          },
+          "baseline_artist_mean_spearman": {
+            "type": "number",
+            "title": "Baseline Artist Mean Spearman"
+          },
+          "dataset_md5": {
+            "type": "string",
+            "title": "Dataset Md5"
+          },
+          "hit_means": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Hit Means"
+          },
+          "known_genres": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Known Genres"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "threshold",
+          "metrics",
+          "baseline_ridge_ndcg_at_k",
+          "baseline_ridge_spearman",
+          "baseline_artist_mean_ndcg_at_k",
+          "baseline_artist_mean_spearman",
+          "dataset_md5",
+          "hit_means",
+          "known_genres"
+        ],
+        "title": "ModelMetadata"
+      },
+      "PredictionRequest": {
+        "properties": {
+          "features": {
+            "$ref": "#/components/schemas/TrackFeatures"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "user",
+              "catalog"
+            ],
+            "title": "Source",
+            "default": "user"
+          },
+          "use_artist_context": {
+            "type": "boolean",
+            "title": "Use Artist Context",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "features"
+        ],
+        "title": "PredictionRequest"
+      },
+      "PredictionResponse": {
+        "properties": {
+          "percentile_score": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Percentile Score",
+            "description": "Percentil previsto de popularidade dentro do g\u00eanero (0-100): o alvo real do modelo"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "artist_aware",
+              "audio_only"
+            ],
+            "title": "Mode",
+            "description": "artist_aware: usou o hist\u00f3rico do artista; audio_only: s\u00f3 as features da faixa"
+          },
+          "expected_popularity": {
+            "type": "number",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Expected Popularity",
+            "description": "Popularidade (0-100) esperada NO G\u00caNERO para esse percentil previsto"
+          },
+          "is_hit": {
+            "type": "boolean",
+            "title": "Is Hit",
+            "description": "Badge: probability >= threshold (threshold calibrado por custo de neg\u00f3cio)"
+          },
+          "probability": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Probability",
+            "description": "P(hit hist\u00f3rico), isot\u00f4nica sobre o percentile_score"
+          },
+          "threshold": {
+            "type": "number",
+            "title": "Threshold"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version"
+          },
+          "top_factors": {
+            "items": {
+              "$ref": "#/components/schemas/ShapFactor"
+            },
+            "type": "array",
+            "title": "Top Factors"
+          },
+          "factors": {
+            "items": {
+              "$ref": "#/components/schemas/ShapFactor"
+            },
+            "type": "array",
+            "title": "Factors",
+            "description": "Todos os fatores, do maior ao menor impacto"
+          }
+        },
+        "type": "object",
+        "required": [
+          "percentile_score",
+          "mode",
+          "expected_popularity",
+          "is_hit",
+          "probability",
+          "threshold",
+          "model_version",
+          "top_factors",
+          "factors"
+        ],
+        "title": "PredictionResponse"
+      },
+      "ShapFactor": {
+        "properties": {
+          "feature": {
+            "type": "string",
+            "title": "Feature"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Value"
+          },
+          "shap_value": {
+            "type": "number",
+            "title": "Shap Value",
+            "description": "Contribui\u00e7\u00e3o, em pontos de percentil, para o percentile_score previsto"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "increases",
+              "decreases"
+            ],
+            "title": "Direction"
+          }
+        },
+        "type": "object",
+        "required": [
+          "feature",
+          "value",
+          "shap_value",
+          "direction"
+        ],
+        "title": "ShapFactor"
+      },
+      "TrackFeatures": {
+        "properties": {
+          "danceability": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Danceability"
+          },
+          "energy": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Energy"
+          },
+          "valence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Valence"
+          },
+          "tempo": {
+            "type": "number",
+            "maximum": 300.0,
+            "minimum": 30.0,
+            "title": "Tempo"
+          },
+          "loudness": {
+            "type": "number",
+            "maximum": 5.0,
+            "minimum": -60.0,
+            "title": "Loudness"
+          },
+          "speechiness": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Speechiness"
+          },
+          "acousticness": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Acousticness"
+          },
+          "instrumentalness": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Instrumentalness"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "maximum": 900000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Duration Ms"
+          },
+          "track_genre": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Track Genre"
+          },
+          "liveness": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Liveness"
+          },
+          "key": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 11.0,
+                "minimum": -1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key"
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mode"
+          },
+          "time_signature": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 7.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Signature"
+          },
+          "explicit": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Explicit"
+          },
+          "artist_n_tracks": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artist N Tracks",
+            "description": "Outras faixas do artista"
+          },
+          "artist_mean_popularity": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 100.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artist Mean Popularity",
+            "description": "Popularidade m\u00e9dia (0-100) das outras faixas do artista"
+          },
+          "artist_hit_share": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Artist Hit Share",
+            "description": "Fra\u00e7\u00e3o das outras faixas do artista com popularidade \u2265 60"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "danceability",
+          "energy",
+          "valence",
+          "tempo",
+          "loudness",
+          "speechiness",
+          "acousticness",
+          "instrumentalness",
+          "duration_ms",
+          "track_genre"
+        ],
+        "title": "TrackFeatures",
+        "description": "As 10 entradas obrigat\u00f3rias bastam (modalidade s\u00f3-\u00e1udio). Os campos opcionais melhoram a predi\u00e7\u00e3o quando existem.\n\n- `liveness`, `key`, `mode`, `time_signature`, `explicit`: demais features de \u00e1udio/letra do Spotify.\n- `artist_*`: hist\u00f3rico do artista (modalidade com hist\u00f3rico), das OUTRAS faixas j\u00e1 publicadas dele."
+      },
+      "TrackOut": {
+        "properties": {
+          "track_id": {
+            "type": "string",
+            "title": "Track Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "artist": {
+            "type": "string",
+            "title": "Artist"
+          },
+          "popularity": {
+            "type": "integer",
+            "title": "Popularity"
+          },
+          "features": {
+            "$ref": "#/components/schemas/TrackFeatures"
+          }
+        },
+        "type": "object",
+        "required": [
+          "track_id",
+          "name",
+          "artist",
+          "popularity",
+          "features"
+        ],
+        "title": "TrackOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

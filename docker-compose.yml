@@ -1,0 +1,111 @@
+# docker compose up --build  ->  web :5173 | api :8000 | mlflow :5000 | minio console :9001
+# Treino: docker compose --profile train run --rm trainer   (publica o modelo no registry)
+# Drift:  docker compose --profile ops run --rm drift
+x-s3-env: &s3-env
+  MLFLOW_TRACKING_URI: http://mlflow:5000
+  MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+  AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+  AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}
+
+services:
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}
+    ports: ["127.0.0.1:9000:9000", "127.0.0.1:9001:9001"]
+    volumes: ["minio-data:/data"]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      retries: 10
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      minio: { condition: service_healthy }
+    entrypoint: >
+      /bin/sh -c "mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env} &&
+      mc mb --ignore-existing local/models local/dvc"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}
+
+  mlflow:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM ghcr.io/mlflow/mlflow:v3.17.2
+        RUN pip install --no-cache-dir boto3
+    command: >
+      mlflow server --host 0.0.0.0 --port 5000
+      --backend-store-uri sqlite:////mlruns/mlflow.db
+      --artifacts-destination s3://models
+    environment:
+      MLFLOW_S3_ENDPOINT_URL: http://minio:9000
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}
+    depends_on:
+      minio-init: { condition: service_completed_successfully }
+    ports: ["127.0.0.1:5000:5000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 5s
+      retries: 20
+    volumes: ["mlflow-data:/mlruns"]
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment:
+      <<: *s3-env
+      MODEL_REGISTRY_URI: models:/resonance@production
+      MODEL_VERSION_PIN: ${MODEL_VERSION_PIN:-}
+      API_LOG_LEVEL: ${API_LOG_LEVEL:-INFO}
+      CORS_ORIGINS: '["http://localhost:5173"]'
+    depends_on:
+      mlflow: { condition: service_healthy }
+    ports: ["8000:8000"]
+    volumes:
+      - ./data/processed:/srv/data/processed:ro
+      - prediction-logs:/srv/data/prediction_logs
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    depends_on: [api]
+    ports: ["5173:5173"]
+
+  trainer:
+    profiles: [train]
+    build:
+      context: .
+      dockerfile: pipeline/Dockerfile
+    environment:
+      <<: *s3-env
+    depends_on: [mlflow]
+    volumes:
+      - ./data:/repo/data
+      - ./model:/repo/model
+      - ./reports:/repo/reports
+
+  drift:
+    profiles: [ops]
+    build:
+      context: .
+      dockerfile: pipeline/Dockerfile
+    command: python -m resonance_pipeline.drift --logs /logs --out /repo/reports/drift.html
+    volumes:
+      - ./data:/repo/data
+      - ./reports:/repo/reports
+      - prediction-logs:/logs:ro
+
+volumes:
+  mlflow-data:
+  minio-data:
+  prediction-logs:

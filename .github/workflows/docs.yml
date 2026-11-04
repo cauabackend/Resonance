@@ -1,0 +1,54 @@
+name: docs
+# Publica o contrato OpenAPI como página estática (Swagger UI): dá para testar o contrato sem rodar nada localmente.
+on:
+  push:
+    branches: [main]
+    paths: ["web/openapi.json", "api/app/**", ".github/workflows/docs.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: regenera o OpenAPI a partir do código (a fonte da verdade)
+        run: |
+          pip install -e shared -e api
+          mkdir -p site
+          python -m app.export_openapi ../site/openapi.json
+        working-directory: api
+      - name: página do Swagger UI
+        run: |
+          cat > site/index.html <<'HTML'
+          <!doctype html>
+          <html lang="pt-BR"><head><meta charset="utf-8"><title>Resonance API</title>
+          <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui.css"></head>
+          <body><div id="ui"></div>
+          <script src="https://unpkg.com/swagger-ui-dist@5.17.14/swagger-ui-bundle.js"></script>
+          <script>SwaggerUIBundle({ url: "openapi.json", dom_id: "#ui" });</script></body></html>
+          HTML
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

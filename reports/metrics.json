@@ -1,0 +1,18 @@
+{
+  "holdout_ndcg_at_k": 0.8031899086892316,
+  "holdout_spearman": 0.4694841560558137,
+  "holdout_hit_roc_auc": 0.8843082485380616,
+  "holdout_brier": 0.06239831415496913,
+  "holdout_ece": 0.014465918617284908,
+  "holdout_audio_only_ndcg_at_k": 0.6245710063297689,
+  "holdout_audio_only_spearman": 0.14385066147425196,
+  "holdout_audio_only_hit_roc_auc": 0.7997079484101357,
+  "holdout_audio_only_brier": 0.07839893123377205,
+  "baseline_artist_mean_ndcg_at_k": 0.7329665747868889,
+  "baseline_ridge_ndcg_at_k": 0.5509228585246732,
+  "baseline_genre_mean_ndcg_at_k": 0.4972668508630897,
+  "nested_cv_ndcg_at_k_mean": 0.8282019905628513,
+  "nested_cv_spearman_mean": 0.4906398969573905,
+  "nested_cv_audio_only_ndcg_at_k_mean": 0.6227022365768238,
+  "nested_cv_audio_only_spearman_mean": 0.13638717622974544
+}

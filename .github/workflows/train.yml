@@ -1,0 +1,45 @@
+name: train
+# Retreinar o modelo e publicar a imagem da API são eventos independentes.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # semanal, segunda 06:00 UTC
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    env:
+      MLFLOW_DISABLE_AGENT_HINT: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pipeline/pyproject.toml
+      - run: pip install -e shared -e "pipeline[dev]"
+      # Nota: remote DVC padrão é local; em CI aponte `dvc remote modify` p/ o MinIO/S3 do time via secrets.
+      - run: dvc pull
+        continue-on-error: true
+      - name: dvc repro (o estágio evaluate reprova o modelo que não passar o gate)
+        run: dvc repro
+        working-directory: pipeline
+      - uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: reports/
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          branch: bot/retrain
+          title: "chore(model): retreino semanal"
+          commit-message: "chore(model): atualiza dvc.lock e métricas"
+          add-paths: |
+            pipeline/dvc.lock
+            reports/metrics.json
+            reports/evaluation.json
+            reports/analysis.json
+          body: Gerado por `train.yml`. O gate de `evaluate.py` aprovou o candidato; métricas em `reports/`.
