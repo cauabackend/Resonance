@@ -35,6 +35,16 @@ React ──/v1/predict──▶ FastAPI ──carrega artefato──▶ MLflow 
 
 O backend nunca treina em tempo de requisição: só carrega o artefato versionado (`models:/resonance@production`). Decisões e trade-offs em [docs/adr/](docs/adr).
 
+## Protótipo Streamlit (legado)
+
+O app Streamlit original continua no repositório (`app/streamlit_app.py`, `requirements.txt`, `model/model.pkl` e `data/processed/tracks_clean.csv`)
+para o deploy no Streamlit Cloud e o devcontainer, que apontam para esses arquivos. Ele é a primeira iteração (classificador binário) e foi
+substituído pelo stack abaixo, que não depende dele:
+
+```bash
+pip install -r requirements.txt && streamlit run app/streamlit_app.py
+```
+
 ## Como rodar
 
 ### Tudo com Docker
@@ -56,8 +66,8 @@ responde `503` em `/v1/health`.
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -e shared -e "pipeline[dev]" -e "api[dev]"  # shared primeiro: é uma dependência dos outros dois
 
-# O dataset NÃO vem no clone: o remote do DVC é uma pasta local (.dvc-storage/, fora do git). Recupere-o do histórico:
-mkdir -p data/raw && git show 3da0e2b:data/processed/tracks_clean.csv > data/raw/dataset.csv
+# O remote do DVC é uma pasta local (.dvc-storage/, fora do git); o dataset do protótipo vem no clone:
+mkdir -p data/raw && cp data/processed/tracks_clean.csv data/raw/dataset.csv
 dvc add data/raw/dataset.csv                           # atualiza o ponteiro .dvc (o hash muda se o git normalizou finais de linha)
 # ...ou, só para exercitar o pipeline sem os dados reais (sinal fabricado):
 #   python -m resonance_pipeline.synthetic --n 6000 --out data/raw/dataset.csv
