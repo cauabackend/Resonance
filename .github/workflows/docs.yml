@@ -45,6 +45,8 @@ jobs:
 
   deploy:
     needs: build
+    # Só publica se o Pages estiver ligado (Settings > Pages > Source: GitHub Actions) e a variável PAGES_ENABLED=true existir.
+    if: vars.PAGES_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

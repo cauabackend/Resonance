@@ -65,6 +65,9 @@ jobs:
           curl --retry 30 --retry-delay 2 --retry-connrefused -sS http://localhost:8000/v1/health
           curl -fsS http://localhost:8000/openapi.json > /dev/null
       - if: failure()
-        run: docker compose logs --tail=100
+        run: |
+          docker compose ps -a || true
+          docker compose logs --tail=60 --no-color 2>&1 | tr '
+' '|' | head -c 3500 | sed 's/^/::error::/' || true
       - if: always()
         run: docker compose down -v
