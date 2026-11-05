@@ -9,7 +9,7 @@ x-s3-env: &s3-env
 
 services:
   minio:
-    image: minio/minio
+    image: quay.io/minio/minio
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
@@ -18,7 +18,7 @@ services:
     volumes: ["minio-data:/data"]
 
   minio-init:
-    image: minio/mc
+    image: quay.io/minio/mc
     depends_on:
       minio: { condition: service_started }
     # A imagem do minio não traz o mc para um healthcheck: o init tenta de novo até o servidor responder.
