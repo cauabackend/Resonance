@@ -9,25 +9,15 @@ x-s3-env: &s3-env
 
 services:
   minio:
-    image: quay.io/minio/minio
-    command: server /data --console-address ":9001"
+    # O minio/minio e o minio/mc saíram do Docker Hub e do quay.io; esta é uma build comunitária do mesmo servidor, com tag fixa.
+    image: coollabsio/minio:RELEASE.2025-10-15T17-29-55Z
+    # Um diretório em /data vira um bucket: dispensa o mc para criá-los.
+    entrypoint: ["/bin/sh", "-c", "mkdir -p /data/models /data/dvc && exec minio server /data --console-address :9001"]
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}
     ports: ["127.0.0.1:9000:9000", "127.0.0.1:9001:9001"]
     volumes: ["minio-data:/data"]
-
-  minio-init:
-    image: quay.io/minio/mc
-    depends_on:
-      minio: { condition: service_started }
-    # A imagem do minio não traz o mc para um healthcheck: o init tenta de novo até o servidor responder.
-    entrypoint: >
-      /bin/sh -c "until mc alias set local http://minio:9000 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}; do sleep 2; done &&
-      mc mb --ignore-existing local/models local/dvc"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}
 
   mlflow:
     build:
@@ -44,7 +34,7 @@ services:
       AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
       AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD:?defina MINIO_ROOT_PASSWORD no .env}
     depends_on:
-      minio-init: { condition: service_completed_successfully }
+      minio: { condition: service_started }
     ports: ["127.0.0.1:5000:5000"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]

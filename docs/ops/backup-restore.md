@@ -18,13 +18,10 @@ docker run --rm -v resonance_mlflow-data:/mlruns -v "$PWD/backup":/backup alpine
   tar czf /backup/mlflow-$STAMP.tgz -C /mlruns .
 docker compose start mlflow
 
-# 2) MinIO (buckets models e dvc) com o cliente mc
-docker run --rm --network resonance_default -v "$PWD/backup/minio-$STAMP":/out \
-  -e MC_HOST_src="http://$MINIO_ROOT_USER:$MINIO_ROOT_PASSWORD@minio:9000" minio/mc \
-  mirror src/models /out/models && \
-docker run --rm --network resonance_default -v "$PWD/backup/minio-$STAMP":/out \
-  -e MC_HOST_src="http://$MINIO_ROOT_USER:$MINIO_ROOT_PASSWORD@minio:9000" minio/mc \
-  mirror src/dvc /out/dvc
+# 2) MinIO (buckets models e dvc): cópia do volume, com o servidor parado
+docker compose stop minio
+docker run --rm -v resonance_minio-data:/data -v "$PWD/backup":/backup alpine   tar czf /backup/minio-$STAMP.tgz -C /data .
+docker compose start minio
 ```
 
 O nome da rede e dos volumes depende do nome do projeto do Compose (`resonance_` é o padrão para o diretório `Resonance`).
@@ -37,12 +34,8 @@ docker compose down                       # sem apagar volumes (sem -v)
 docker volume rm resonance_mlflow-data && docker volume create resonance_mlflow-data
 docker run --rm -v resonance_mlflow-data:/mlruns -v "$PWD/backup":/backup alpine \
   tar xzf /backup/mlflow-<STAMP>.tgz -C /mlruns
-docker compose up -d minio minio-init
-# devolve os objetos aos buckets
-docker run --rm --network resonance_default -v "$PWD/backup/minio-<STAMP>":/in \
-  -e MC_HOST_dst="http://$MINIO_ROOT_USER:$MINIO_ROOT_PASSWORD@minio:9000" minio/mc mirror /in/models dst/models
-docker run --rm --network resonance_default -v "$PWD/backup/minio-<STAMP>":/in \
-  -e MC_HOST_dst="http://$MINIO_ROOT_USER:$MINIO_ROOT_PASSWORD@minio:9000" minio/mc mirror /in/dvc dst/dvc
+docker volume rm resonance_minio-data && docker volume create resonance_minio-data
+docker run --rm -v resonance_minio-data:/data -v "$PWD/backup":/backup alpine   tar xzf /backup/minio-<STAMP>.tgz -C /data
 docker compose up -d
 ```
 
