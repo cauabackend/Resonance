@@ -26,7 +26,7 @@ jobs:
       - name: regenera o OpenAPI a partir do código (a fonte da verdade)
         run: |
           pip install -e ../shared -e ../api
-          mkdir -p site
+          mkdir -p ../site
           python -m app.export_openapi ../site/openapi.json
         working-directory: api
       - name: página do Swagger UI
