@@ -56,6 +56,7 @@ jobs:
       - name: sobe a stack (mlflow + minio + api + web) e checa os endpoints
         run: |
           cp .env.example .env
+          echo "MINIO_ROOT_PASSWORD=ci-smoke-$RANDOM$RANDOM" >> .env
           docker compose up -d --build mlflow web
           curl --retry 30 --retry-delay 2 --retry-connrefused -fsS http://localhost:5000/health
           curl --retry 15 --retry-delay 2 --retry-connrefused -fsS http://localhost:5173/ > /dev/null

@@ -25,7 +25,7 @@ jobs:
           python-version: "3.12"
       - name: regenera o OpenAPI a partir do código (a fonte da verdade)
         run: |
-          pip install -e shared -e api
+          pip install -e ../shared -e ../api
           mkdir -p site
           python -m app.export_openapi ../site/openapi.json
         working-directory: api

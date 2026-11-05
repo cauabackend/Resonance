@@ -4,614 +4,614 @@
  */
 
 export interface paths {
-  "/v1/predict": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v1/predict": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Predict
+         * @description Uma música, resposta interativa (com explicação SHAP em pontos de percentil).
+         */
+        post: operations["predict_v1_predict_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Predict
-     * @description Uma música, resposta interativa (com explicação SHAP em pontos de percentil).
-     */
-    post: operations["predict_v1_predict_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/v1/predict/batch": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v1/predict/batch": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Predict Batch
+         * @description Lote vetorizado (ex.: 500 demos), devolvido ORDENADO por percentile_score, sem explicação SHAP.
+         */
+        post: operations["predict_batch_v1_predict_batch_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /**
-     * Predict Batch
-     * @description Lote vetorizado (ex.: 500 demos), devolvido ORDENADO por percentile_score, sem explicação SHAP.
-     */
-    post: operations["predict_batch_v1_predict_batch_post"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/v1/tracks/search": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v1/tracks/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search */
+        get: operations["search_v1_tracks_search_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Search */
-    get: operations["search_v1_tracks_search_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/v1/tracks/{track_id}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v1/tracks/{track_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Track */
+        get: operations["get_track_v1_tracks__track_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Get Track */
-    get: operations["get_track_v1_tracks__track_id__get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/v1/model/metadata": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v1/model/metadata": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Metadata */
+        get: operations["metadata_v1_model_metadata_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Metadata */
-    get: operations["metadata_v1_model_metadata_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/v1/health": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v1/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health */
+        get: operations["health_v1_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** Health */
-    get: operations["health_v1_health_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/v1/health/deep": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/v1/health/deep": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Health Deep
+         * @description Valida que o modelo em memória é o artefato que o registry serve agora (não só que o processo está de pé).
+         */
+        get: operations["health_deep_v1_health_deep_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /**
-     * Health Deep
-     * @description Valida que o modelo em memória é o artefato que o registry serve agora (não só que o processo está de pé).
-     */
-    get: operations["health_deep_v1_health_deep_get"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    /** BatchItem */
-    BatchItem: {
-      /**
-       * Input Index
-       * @description Posição da faixa na lista enviada
-       */
-      input_index: number;
-      /**
-       * Rank
-       * @description Posição no lote, 1 = maior percentile_score
-       */
-      rank: number;
-      /**
-       * Mode
-       * @enum {string}
-       */
-      mode: "artist_aware" | "audio_only";
-      /** Percentile Score */
-      percentile_score: number;
-      /** Expected Popularity */
-      expected_popularity: number;
-      /** Probability */
-      probability: number;
-      /** Is Hit */
-      is_hit: boolean;
+    schemas: {
+        /** BatchItem */
+        BatchItem: {
+            /**
+             * Input Index
+             * @description Posição da faixa na lista enviada
+             */
+            input_index: number;
+            /**
+             * Rank
+             * @description Posição no lote, 1 = maior percentile_score
+             */
+            rank: number;
+            /**
+             * Mode
+             * @enum {string}
+             */
+            mode: "artist_aware" | "audio_only";
+            /** Percentile Score */
+            percentile_score: number;
+            /** Expected Popularity */
+            expected_popularity: number;
+            /** Probability */
+            probability: number;
+            /** Is Hit */
+            is_hit: boolean;
+        };
+        /** BatchPredictionResponse */
+        BatchPredictionResponse: {
+            /** Model Version */
+            model_version: string;
+            /**
+             * Thresholds
+             * @description Threshold do badge por modalidade (artist_aware, audio_only)
+             */
+            thresholds: {
+                [key: string]: number;
+            };
+            /**
+             * Results
+             * @description Já ordenado por percentile_score decrescente
+             */
+            results: components["schemas"]["BatchItem"][];
+            /**
+             * Rank
+             * @description rank[i] = posição da i-ésima faixa enviada dentro do lote
+             */
+            rank: number[];
+        };
+        /** BatchRequest */
+        BatchRequest: {
+            /** Tracks */
+            tracks: components["schemas"]["TrackFeatures"][];
+            /**
+             * Use Artist Context
+             * @default true
+             */
+            use_artist_context: boolean;
+        };
+        /** DeepHealth */
+        DeepHealth: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "mismatch" | "degraded";
+            /** Model Version */
+            model_version: string | null;
+            /** Loaded Sha256 */
+            loaded_sha256: string | null;
+            /**
+             * Registry Sha256
+             * @description Hash do artefato que o registry serve AGORA (alias/versão atual)
+             */
+            registry_sha256: string | null;
+            /** Detail */
+            detail: string;
+        };
+        /** HTTPValidationError */
+        HTTPValidationError: {
+            /** Detail */
+            detail?: components["schemas"]["ValidationError"][];
+        };
+        /** Health */
+        Health: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "ok" | "degraded";
+            /** Model Version */
+            model_version: string | null;
+            /** Catalog Loaded */
+            catalog_loaded: boolean;
+        };
+        /** ModelMetadata */
+        ModelMetadata: {
+            /** Version */
+            version: string;
+            /** Created At */
+            created_at?: string | null;
+            /** Threshold */
+            threshold: number;
+            /** Metrics */
+            metrics: {
+                [key: string]: number;
+            };
+            /**
+             * Baseline Ridge Ndcg At K
+             * @description Piso da modalidade só-áudio (regressão linear)
+             */
+            baseline_ridge_ndcg_at_k: number;
+            /** Baseline Ridge Spearman */
+            baseline_ridge_spearman: number;
+            /**
+             * Baseline Artist Mean Ndcg At K
+             * @description Piso da modalidade com histórico (média do artista)
+             */
+            baseline_artist_mean_ndcg_at_k: number;
+            /** Baseline Artist Mean Spearman */
+            baseline_artist_mean_spearman: number;
+            /** Dataset Md5 */
+            dataset_md5: string;
+            /** Hit Means */
+            hit_means: {
+                [key: string]: number;
+            };
+            /** Known Genres */
+            known_genres: string[];
+        };
+        /** PredictionRequest */
+        PredictionRequest: {
+            features: components["schemas"]["TrackFeatures"];
+            /**
+             * Source
+             * @default user
+             * @enum {string}
+             */
+            source: "user" | "catalog";
+            /**
+             * Use Artist Context
+             * @default true
+             */
+            use_artist_context: boolean;
+        };
+        /** PredictionResponse */
+        PredictionResponse: {
+            /**
+             * Percentile Score
+             * @description Percentil previsto de popularidade dentro do gênero (0-100): o alvo real do modelo
+             */
+            percentile_score: number;
+            /**
+             * Mode
+             * @description artist_aware: usou o histórico do artista; audio_only: só as features da faixa
+             * @enum {string}
+             */
+            mode: "artist_aware" | "audio_only";
+            /**
+             * Expected Popularity
+             * @description Popularidade (0-100) esperada NO GÊNERO para esse percentil previsto
+             */
+            expected_popularity: number;
+            /**
+             * Is Hit
+             * @description Badge: probability >= threshold (threshold calibrado por custo de negócio)
+             */
+            is_hit: boolean;
+            /**
+             * Probability
+             * @description P(hit histórico), isotônica sobre o percentile_score
+             */
+            probability: number;
+            /** Threshold */
+            threshold: number;
+            /** Model Version */
+            model_version: string;
+            /** Top Factors */
+            top_factors: components["schemas"]["ShapFactor"][];
+            /**
+             * Factors
+             * @description Todos os fatores, do maior ao menor impacto
+             */
+            factors: components["schemas"]["ShapFactor"][];
+        };
+        /** ShapFactor */
+        ShapFactor: {
+            /** Feature */
+            feature: string;
+            /** Value */
+            value: number | string;
+            /**
+             * Shap Value
+             * @description Contribuição, em pontos de percentil, para o percentile_score previsto
+             */
+            shap_value: number;
+            /**
+             * Direction
+             * @enum {string}
+             */
+            direction: "increases" | "decreases";
+        };
+        /**
+         * TrackFeatures
+         * @description As 10 entradas obrigatórias bastam (modalidade só-áudio). Os campos opcionais melhoram a predição quando existem.
+         *
+         *     - `liveness`, `key`, `mode`, `time_signature`, `explicit`: demais features de áudio/letra do Spotify.
+         *     - `artist_*`: histórico do artista (modalidade com histórico), das OUTRAS faixas já publicadas dele.
+         */
+        TrackFeatures: {
+            /** Danceability */
+            danceability: number;
+            /** Energy */
+            energy: number;
+            /** Valence */
+            valence: number;
+            /** Tempo */
+            tempo: number;
+            /** Loudness */
+            loudness: number;
+            /** Speechiness */
+            speechiness: number;
+            /** Acousticness */
+            acousticness: number;
+            /** Instrumentalness */
+            instrumentalness: number;
+            /** Duration Ms */
+            duration_ms: number;
+            /** Track Genre */
+            track_genre: string;
+            /** Liveness */
+            liveness?: number | null;
+            /** Key */
+            key?: number | null;
+            /** Mode */
+            mode?: number | null;
+            /** Time Signature */
+            time_signature?: number | null;
+            /** Explicit */
+            explicit?: boolean | null;
+            /**
+             * Artist N Tracks
+             * @description Outras faixas do artista
+             */
+            artist_n_tracks?: number | null;
+            /**
+             * Artist Mean Popularity
+             * @description Popularidade média (0-100) das outras faixas do artista
+             */
+            artist_mean_popularity?: number | null;
+            /**
+             * Artist Hit Share
+             * @description Fração das outras faixas do artista com popularidade ≥ 60
+             */
+            artist_hit_share?: number | null;
+        };
+        /** TrackOut */
+        TrackOut: {
+            /** Track Id */
+            track_id: string;
+            /** Name */
+            name: string;
+            /** Artist */
+            artist: string;
+            /** Popularity */
+            popularity: number;
+            features: components["schemas"]["TrackFeatures"];
+        };
+        /** ValidationError */
+        ValidationError: {
+            /** Location */
+            loc: (string | number)[];
+            /** Message */
+            msg: string;
+            /** Error Type */
+            type: string;
+            /** Input */
+            input?: unknown;
+            /** Context */
+            ctx?: Record<string, never>;
+        };
     };
-    /** BatchPredictionResponse */
-    BatchPredictionResponse: {
-      /** Model Version */
-      model_version: string;
-      /**
-       * Thresholds
-       * @description Threshold do badge por modalidade (artist_aware, audio_only)
-       */
-      thresholds: {
-        [key: string]: number;
-      };
-      /**
-       * Results
-       * @description Já ordenado por percentile_score decrescente
-       */
-      results: components["schemas"]["BatchItem"][];
-      /**
-       * Rank
-       * @description rank[i] = posição da i-ésima faixa enviada dentro do lote
-       */
-      rank: number[];
-    };
-    /** BatchRequest */
-    BatchRequest: {
-      /** Tracks */
-      tracks: components["schemas"]["TrackFeatures"][];
-      /**
-       * Use Artist Context
-       * @default true
-       */
-      use_artist_context: boolean;
-    };
-    /** DeepHealth */
-    DeepHealth: {
-      /**
-       * Status
-       * @enum {string}
-       */
-      status: "ok" | "mismatch" | "degraded";
-      /** Model Version */
-      model_version: string | null;
-      /** Loaded Sha256 */
-      loaded_sha256: string | null;
-      /**
-       * Registry Sha256
-       * @description Hash do artefato que o registry serve AGORA (alias/versão atual)
-       */
-      registry_sha256: string | null;
-      /** Detail */
-      detail: string;
-    };
-    /** HTTPValidationError */
-    HTTPValidationError: {
-      /** Detail */
-      detail?: components["schemas"]["ValidationError"][];
-    };
-    /** Health */
-    Health: {
-      /**
-       * Status
-       * @enum {string}
-       */
-      status: "ok" | "degraded";
-      /** Model Version */
-      model_version: string | null;
-      /** Catalog Loaded */
-      catalog_loaded: boolean;
-    };
-    /** ModelMetadata */
-    ModelMetadata: {
-      /** Version */
-      version: string;
-      /** Created At */
-      created_at?: string | null;
-      /** Threshold */
-      threshold: number;
-      /** Metrics */
-      metrics: {
-        [key: string]: number;
-      };
-      /**
-       * Baseline Ridge Ndcg At K
-       * @description Piso da modalidade só-áudio (regressão linear)
-       */
-      baseline_ridge_ndcg_at_k: number;
-      /** Baseline Ridge Spearman */
-      baseline_ridge_spearman: number;
-      /**
-       * Baseline Artist Mean Ndcg At K
-       * @description Piso da modalidade com histórico (média do artista)
-       */
-      baseline_artist_mean_ndcg_at_k: number;
-      /** Baseline Artist Mean Spearman */
-      baseline_artist_mean_spearman: number;
-      /** Dataset Md5 */
-      dataset_md5: string;
-      /** Hit Means */
-      hit_means: {
-        [key: string]: number;
-      };
-      /** Known Genres */
-      known_genres: string[];
-    };
-    /** PredictionRequest */
-    PredictionRequest: {
-      features: components["schemas"]["TrackFeatures"];
-      /**
-       * Source
-       * @default user
-       * @enum {string}
-       */
-      source: "user" | "catalog";
-      /**
-       * Use Artist Context
-       * @default true
-       */
-      use_artist_context: boolean;
-    };
-    /** PredictionResponse */
-    PredictionResponse: {
-      /**
-       * Percentile Score
-       * @description Percentil previsto de popularidade dentro do gênero (0-100): o alvo real do modelo
-       */
-      percentile_score: number;
-      /**
-       * Mode
-       * @description artist_aware: usou o histórico do artista; audio_only: só as features da faixa
-       * @enum {string}
-       */
-      mode: "artist_aware" | "audio_only";
-      /**
-       * Expected Popularity
-       * @description Popularidade (0-100) esperada NO GÊNERO para esse percentil previsto
-       */
-      expected_popularity: number;
-      /**
-       * Is Hit
-       * @description Badge: probability >= threshold (threshold calibrado por custo de negócio)
-       */
-      is_hit: boolean;
-      /**
-       * Probability
-       * @description P(hit histórico), isotônica sobre o percentile_score
-       */
-      probability: number;
-      /** Threshold */
-      threshold: number;
-      /** Model Version */
-      model_version: string;
-      /** Top Factors */
-      top_factors: components["schemas"]["ShapFactor"][];
-      /**
-       * Factors
-       * @description Todos os fatores, do maior ao menor impacto
-       */
-      factors: components["schemas"]["ShapFactor"][];
-    };
-    /** ShapFactor */
-    ShapFactor: {
-      /** Feature */
-      feature: string;
-      /** Value */
-      value: number | string;
-      /**
-       * Shap Value
-       * @description Contribuição, em pontos de percentil, para o percentile_score previsto
-       */
-      shap_value: number;
-      /**
-       * Direction
-       * @enum {string}
-       */
-      direction: "increases" | "decreases";
-    };
-    /**
-     * TrackFeatures
-     * @description As 10 entradas obrigatórias bastam (modalidade só-áudio). Os campos opcionais melhoram a predição quando existem.
-     *
-     *     - `liveness`, `key`, `mode`, `time_signature`, `explicit`: demais features de áudio/letra do Spotify.
-     *     - `artist_*`: histórico do artista (modalidade com histórico), das OUTRAS faixas já publicadas dele.
-     */
-    TrackFeatures: {
-      /** Danceability */
-      danceability: number;
-      /** Energy */
-      energy: number;
-      /** Valence */
-      valence: number;
-      /** Tempo */
-      tempo: number;
-      /** Loudness */
-      loudness: number;
-      /** Speechiness */
-      speechiness: number;
-      /** Acousticness */
-      acousticness: number;
-      /** Instrumentalness */
-      instrumentalness: number;
-      /** Duration Ms */
-      duration_ms: number;
-      /** Track Genre */
-      track_genre: string;
-      /** Liveness */
-      liveness?: number | null;
-      /** Key */
-      key?: number | null;
-      /** Mode */
-      mode?: number | null;
-      /** Time Signature */
-      time_signature?: number | null;
-      /** Explicit */
-      explicit?: boolean | null;
-      /**
-       * Artist N Tracks
-       * @description Outras faixas do artista
-       */
-      artist_n_tracks?: number | null;
-      /**
-       * Artist Mean Popularity
-       * @description Popularidade média (0-100) das outras faixas do artista
-       */
-      artist_mean_popularity?: number | null;
-      /**
-       * Artist Hit Share
-       * @description Fração das outras faixas do artista com popularidade ≥ 60
-       */
-      artist_hit_share?: number | null;
-    };
-    /** TrackOut */
-    TrackOut: {
-      /** Track Id */
-      track_id: string;
-      /** Name */
-      name: string;
-      /** Artist */
-      artist: string;
-      /** Popularity */
-      popularity: number;
-      features: components["schemas"]["TrackFeatures"];
-    };
-    /** ValidationError */
-    ValidationError: {
-      /** Location */
-      loc: (string | number)[];
-      /** Message */
-      msg: string;
-      /** Error Type */
-      type: string;
-      /** Input */
-      input?: unknown;
-      /** Context */
-      ctx?: Record<string, never>;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-  predict_v1_predict_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    predict_v1_predict_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PredictionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PredictionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PredictionRequest"];
-      };
+    predict_batch_v1_predict_batch_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchPredictionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
     };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    search_v1_tracks_search_get: {
+        parameters: {
+            query: {
+                q: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          "application/json": components["schemas"]["PredictionResponse"];
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrackOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
     };
-  };
-  predict_batch_v1_predict_batch_post: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    get_track_v1_tracks__track_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                track_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrackOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["BatchRequest"];
-      };
+    metadata_v1_model_metadata_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ModelMetadata"];
+                };
+            };
+        };
     };
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
+    health_v1_health_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        content: {
-          "application/json": components["schemas"]["BatchPredictionResponse"];
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Health"];
+                };
+            };
         };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
     };
-  };
-  search_v1_tracks_search_get: {
-    parameters: {
-      query: {
-        q: string;
-        limit?: number;
-      };
-      header?: never;
-      path?: never;
-      cookie?: never;
+    health_deep_v1_health_deep_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeepHealth"];
+                };
+            };
+        };
     };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TrackOut"][];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  get_track_v1_tracks__track_id__get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        track_id: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["TrackOut"];
-        };
-      };
-      /** @description Validation Error */
-      422: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
-  metadata_v1_model_metadata_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["ModelMetadata"];
-        };
-      };
-    };
-  };
-  health_v1_health_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["Health"];
-        };
-      };
-    };
-  };
-  health_deep_v1_health_deep_get: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description Successful Response */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["DeepHealth"];
-        };
-      };
-    };
-  };
 }
