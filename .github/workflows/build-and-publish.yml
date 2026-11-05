@@ -67,7 +67,6 @@ jobs:
       - if: failure()
         run: |
           docker compose ps -a || true
-          docker compose logs --tail=60 --no-color 2>&1 | tr '
-' '|' | head -c 3500 | sed 's/^/::error::/' || true
+          docker compose logs --tail=60 --no-color 2>&1 | tr '\n' '|'| head -c 3500 | sed 's/^/::error::/' || true
       - if: always()
         run: docker compose down -v
