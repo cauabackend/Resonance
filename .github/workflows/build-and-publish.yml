@@ -58,11 +58,11 @@ jobs:
           cp .env.example .env
           echo "MINIO_ROOT_PASSWORD=ci-smoke-$RANDOM$RANDOM" >> .env
           docker compose up -d --build mlflow web > up.log 2>&1 || { tail -c 3000 up.log | tr '\n' '|' | sed 's/^/::error::/'; exit 1; }
-          curl --retry 30 --retry-delay 2 --retry-connrefused -fsS http://localhost:5000/health
-          curl --retry 15 --retry-delay 2 --retry-connrefused -fsS http://localhost:5173/ > /dev/null
+          curl --retry 30 --retry-delay 2 --retry-connrefused --retry-all-errors -fsS http://localhost:5000/health
+          curl --retry 15 --retry-delay 2 --retry-connrefused --retry-all-errors -fsS http://localhost:5173/ > /dev/null
           # A API fica "degraded" (503) até existir modelo em Production: o smoke exige que ela responda.
           docker compose up -d api
-          curl --retry 30 --retry-delay 2 --retry-connrefused -sS http://localhost:8000/v1/health
+          curl --retry 30 --retry-delay 2 --retry-connrefused --retry-all-errors -sS http://localhost:8000/v1/health
           curl -fsS http://localhost:8000/openapi.json > /dev/null
       - if: failure()
         run: |
