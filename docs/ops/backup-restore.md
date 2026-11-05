@@ -20,7 +20,8 @@ docker compose start mlflow
 
 # 2) MinIO (buckets models e dvc): cópia do volume, com o servidor parado
 docker compose stop minio
-docker run --rm -v resonance_minio-data:/data -v "$PWD/backup":/backup alpine   tar czf /backup/minio-$STAMP.tgz -C /data .
+docker run --rm -v resonance_minio-data:/data -v "$PWD/backup":/backup alpine \
+  tar czf /backup/minio-$STAMP.tgz -C /data .
 docker compose start minio
 ```
 
@@ -35,7 +36,8 @@ docker volume rm resonance_mlflow-data && docker volume create resonance_mlflow-
 docker run --rm -v resonance_mlflow-data:/mlruns -v "$PWD/backup":/backup alpine \
   tar xzf /backup/mlflow-<STAMP>.tgz -C /mlruns
 docker volume rm resonance_minio-data && docker volume create resonance_minio-data
-docker run --rm -v resonance_minio-data:/data -v "$PWD/backup":/backup alpine   tar xzf /backup/minio-<STAMP>.tgz -C /data
+docker run --rm -v resonance_minio-data:/data -v "$PWD/backup":/backup alpine \
+  tar xzf /backup/minio-<STAMP>.tgz -C /data
 docker compose up -d
 ```
 
